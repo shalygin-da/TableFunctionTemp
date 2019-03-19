@@ -25,7 +25,7 @@ public final class TableFunction {
     }
     public void put(Pair pair){
         boolean unique = true;
-        for (int i = 1;i < array.length; i++)
+        for (int i = 0; i < array.length; i++)
             if (array[i].getX() == pair.getX()) {
             unique = false;
             break;
@@ -48,33 +48,27 @@ public final class TableFunction {
         for (int n = index; n < array.length - 1; n++) {
             array[n + 1] = array[n];
             array[n + 1] = null; //unsure of how to remove the null field at the end of the table
-                                 //array = Arrays.copyOf(array, array.length - 1) maybe this'll work
+            array = Arrays.copyOf(array, array.length - 1); //maybe this'll work
         }
     }
 
     @Override
     public String toString() {
-        if (array == null) return null;
-        else {
-            String arse = array[0].toString();
-            for (int i = 1; i < array.length; i++) arse += "\n" + array[i].toString();
-            return arse;
-        }
+        String arse = array[0].toString() + "\n";
+        for (int i = 1; i < array.length; i++) arse += array[i];
+        return arse;
     }
 
     public Pair searchNearest(int x0) {
-        if (array == null) return null;
-        else {
-            Pair ans = array[0];
-            double minDist = x0 - array[0].getX();
-            for (int i = 0; i < array.length; i++) {
-                if (minDist > x0 - array[i].getX()) {
-                    minDist = x0 - array[i].getX();
-                    ans = array[i];
-                }
+        Pair ans = array[0];
+        double minDist = x0 - array[0].getX();
+        for (int i = 0; i < array.length; i++) {
+            if (minDist > x0 - array[i].getX()) {
+                minDist = x0 - array[i].getX();
+                ans = array[i];
             }
-            return ans;
         }
+        return ans;
     }
 
     public double interp(double x) {
