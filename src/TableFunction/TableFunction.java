@@ -3,14 +3,16 @@ package tableFunction;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static java.lang.Math.abs;
+
 public final class TableFunction {
 
     private Pair<Double, Double>[] array;
 
-    public TableFunction(double ... arg) {
+    public TableFunction(Double ... arg) {
         if (arg.length % 2 != 0) throw new IllegalArgumentException();
         else {
-            array = new Pair[arg.length];
+            array = new Pair[arg.length / 2];
             int count = 0;
             for (int i = 0; i < arg.length; i += 2) {
                 array[count] = new Pair(arg[i], arg[i+1]);
@@ -23,48 +25,55 @@ public final class TableFunction {
         int oldCapacity = array.length;
         if (minCapacity > oldCapacity) array = Arrays.copyOf(array, minCapacity);
     }
-    public void put(Pair pair){
+    public void put(Double x, Double y){
         boolean unique = true;
         for (int i = 0; i < array.length; i++)
-            if (array[i].getX() == pair.getX()) {
+            if (array[i].getX() == x) {
             unique = false;
             break;
         }
         if (unique) {
             ensureCapacity(array.length + 1);
-            array[array.length - 1] = pair;
+            array[array.length - 1] = new Pair(x, y);
         }
     }
 
-    public void remove(Pair<Double, Double> pair) {
-        int index = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].getX() == pair.getX()) {
-                array[i] = null;
-                index = i;
-                break;
-            }
+    public void remove(Double x) {
+        if (array.length == 1) {
+            if (array[0].getX() == x) array[0] = null;
         }
-        for (int n = index; n < array.length - 1; n++) {
-            array[n + 1] = array[n];
-            array[n + 1] = null; //unsure of how to remove the null field at the end of the table
-            array = Arrays.copyOf(array, array.length - 1); //maybe this'll work
+        else {
+            int index = 0;
+            for (int i = 0; i < array.length; i++) {
+                if (array[i].getX() == x) {
+                    array[i] = null;
+                    index = i;
+                    break;
+                }
+            }
+            for (int n = index; n < array.length - 1; n++) {
+                array[n] = array[n + 1];
+                array = Arrays.copyOf(array, array.length - 1);
+            }
         }
     }
 
     @Override
     public String toString() {
-        String arse = array[0].toString() + "\n";
-        for (int i = 1; i < array.length; i++) arse += array[i];
-        return arse;
+        if (array.length == 0) return null;
+        else {
+            String arse = array[0].toString();
+            for (int i = 1; i < array.length; i++) arse += "\n" + array[i].toString();
+            return arse;
+        }
     }
 
-    public Pair searchNearest(int x0) {
+    public Pair searchNearest(Double x0) {
         Pair ans = array[0];
-        double minDist = x0 - array[0].getX();
+        double minDist = abs(x0 - array[0].getX());
         for (int i = 0; i < array.length; i++) {
-            if (minDist > x0 - array[i].getX()) {
-                minDist = x0 - array[i].getX();
+            if (minDist > abs(x0 - array[i].getX())) {
+                minDist = abs(x0 - array[i].getX());
                 ans = array[i];
             }
         }
