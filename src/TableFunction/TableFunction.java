@@ -1,4 +1,4 @@
-package TableFunction;
+package tableFunction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
