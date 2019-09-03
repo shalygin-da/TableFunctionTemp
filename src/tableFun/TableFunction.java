@@ -1,7 +1,9 @@
-package tableFunction;
+package tableFun;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static java.lang.Math.abs;
 
@@ -9,13 +11,13 @@ public final class TableFunction {
 
     private Pair<Double, Double>[] array;
 
-    public TableFunction(Double ... arg) {
+    public TableFunction(double... arg) {
         if (arg.length % 2 != 0) throw new IllegalArgumentException();
         else {
             array = new Pair[arg.length / 2];
             int count = 0;
             for (int i = 0; i < arg.length; i += 2) {
-                array[count] = new Pair(arg[i], arg[i+1]);
+                array[count] = new Pair(arg[i], arg[i + 1]);
                 count++;
             }
         }
@@ -25,36 +27,32 @@ public final class TableFunction {
         int oldCapacity = array.length;
         if (minCapacity > oldCapacity) array = Arrays.copyOf(array, minCapacity);
     }
-    public void put(Double x, Double y){
+
+    public void put(double x, double y) {
         boolean unique = true;
         for (int i = 0; i < array.length; i++)
             if (array[i].getX() == x) {
-            unique = false;
-            break;
-        }
+                unique = false;
+                break;
+            }
         if (unique) {
             ensureCapacity(array.length + 1);
             array[array.length - 1] = new Pair(x, y);
         }
     }
 
-    public void remove(Double x) {
-        if (array.length == 1) {
-            if (array[0].getX() == x) array[0] = null;
+    public void remove(double x) {
+        int index = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].getX() == x) {
+                array[i] = null;
+                index = i;
+                break;
+            }
         }
-        else {
-            int index = 0;
-            for (int i = 0; i < array.length; i++) {
-                if (array[i].getX() == x) {
-                    array[i] = null;
-                    index = i;
-                    break;
-                }
-            }
-            for (int n = index; n < array.length - 1; n++) {
-                array[n] = array[n + 1];
-                array = Arrays.copyOf(array, array.length - 1);
-            }
+        for (int n = index; n < array.length - 1; n++) {
+            array[n] = array[n + 1];
+            array = Arrays.copyOf(array, array.length - 1);
         }
     }
 
@@ -68,7 +66,7 @@ public final class TableFunction {
         }
     }
 
-    public Pair searchNearest(Double x0) {
+    public Pair searchNearest(double x0) {
         Pair ans = array[0];
         double minDist = abs(x0 - array[0].getX());
         for (int i = 0; i < array.length; i++) {
@@ -85,7 +83,7 @@ public final class TableFunction {
         for (int count = 0; count < array.length; count++) {
             double l = 0.0;
             for (int i = 0; i < array.length && i != count; i++)
-                l = l * (x - array[i].getX())/(array[count].getX() - array[i].getX());
+                l = l * (x - array[i].getX()) / (array[count].getX() - array[i].getX());
             polynomial.add(l);
         }
         double y = 0.0;
@@ -95,4 +93,25 @@ public final class TableFunction {
         return y;
     }
 
+    public Pair getPair(int pos) {
+        return array[pos];
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        else if (obj == null || obj.getClass() != this.getClass()) return false;
+        TableFunction objTableFun = (TableFunction) obj;
+        boolean proof = true;
+        for (int i = 0; i < array.length; i++) {
+            proof = getPair(i) == objTableFun.getPair(i);
+            if (proof == false) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(array.length, array[0].getX(), array[0].getY());
+    }
 }

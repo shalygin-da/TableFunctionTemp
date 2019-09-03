@@ -1,20 +1,35 @@
 package tests;
 
 
-import org.junit.jupiter.api.Assertions;
-import tableFunction.Pair;
+import tableFun.Pair;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import tableFunction.TableFunction;
+import static org.junit.Assert.assertNotEquals;
+
+import tableFun.TableFunction;
 
 
 public class TableFunctionTests {
 
     @Test
+    public void pairEqualsTest() {
+        assertEquals(new Pair(1, 2), new Pair(1, 2));
+        assertNotEquals(new Pair(10, 245), new Pair(10, 246));
+        assertNotEquals(new Pair(1.0, 1.0), new Pair(1, 1));
+        assertNotEquals(new Pair(1, 1), 11);
+    }
+
+    @Test
+    public void getPairTest() {
+        assertEquals(new Pair(1.0, 2.0), new TableFunction(1, 2).getPair(0));
+    }
+
+    @Test
     public void tableTest() {
         assertEquals( "1.0, 2.0" + "\n" + "3.0, 4.0", new TableFunction(1.0, 2.0, 3.0, 4.0).toString());
-        assertEquals(null, new TableFunction().toString());
-        assertEquals("1.0, 2.0", new TableFunction(1.0, 2.0).toString());
+        assertNotEquals(null, new TableFunction());
+        assertEquals(new TableFunction(1.0, 2.0), new TableFunction(1.0, 2.0));
+        assertNotEquals(new TableFunction(1.0, 2.0, 3.0, 4.0), new TableFunction(1, 2, 3, 4));
     }
 
     public TableFunction putTest() {
@@ -41,7 +56,7 @@ public class TableFunctionTests {
 
     @Test
     public void remove() {
-        assertEquals(new TableFunction().toString(), removeTest2().toString());
+        assertEquals(new TableFunction(), removeTest2());
         assertEquals(new TableFunction(3.0, 4.0), removeTest());
     }
 
