@@ -9,7 +9,7 @@ import static java.lang.Math.abs;
 
 public final class TableFunction {
 
-    private Pair<Double, Double>[] array;
+    private Pair[] array;
 
     public TableFunction(double... arg) {
         if (arg.length % 2 != 0) throw new IllegalArgumentException();
@@ -80,15 +80,15 @@ public final class TableFunction {
 
     public double interp(double x) {
         ArrayList<Double> polynomial = new ArrayList<>();
-        for (int count = 0; count < array.length; count++) {
-            double l = 0.0;
-            for (int i = 0; i < array.length && i != count; i++)
-                l = l * (x - array[i].getX()) / (array[count].getX() - array[i].getX());
+        for (int i = 0; i < array.length; i++) {
+            double l = 1.0;
+            for (int j = 0; j < array.length && j != i; j++)
+                l *= (x - array[j].getX()) / (array[i].getX() - array[j].getX());
             polynomial.add(l);
         }
         double y = 0.0;
-        for (int j = 0; j < array.length; j++) {
-            y = y + array[j].getY() * polynomial.get(j);
+        for (int i = 0; i < array.length; i++) {
+            y += array[i].getY() * polynomial.get(i);
         }
         return y;
     }
@@ -104,10 +104,9 @@ public final class TableFunction {
         TableFunction objTableFun = (TableFunction) obj;
         boolean proof = true;
         for (int i = 0; i < array.length; i++) {
-            proof = getPair(i) == objTableFun.getPair(i);
-            if (proof == false) return false;
+            if (getPair(i) == objTableFun.getPair(i)) proof = false;
         }
-        return true;
+        return proof;
     }
 
     @Override

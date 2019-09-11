@@ -13,15 +13,15 @@ public class TableFunctionTests {
 
     @Test
     public void pairEqualsTest() {
-        assertEquals(new Pair(1, 2), new Pair(1, 2));
-        assertNotEquals(new Pair(10, 245), new Pair(10, 246));
-        assertNotEquals(new Pair(1.0, 1.0), new Pair(1, 1));
-        assertNotEquals(new Pair(1, 1), 11);
+        assertEquals(new Pair(1.0, 2.0), new Pair(1.0, 2.0));
+        assertNotEquals(new Pair(10.0, 245.0), new Pair(10.0, 246.0));
+        assertNotEquals(new Pair(1.0, 1.0), new Pair(1.0, 9.0));
+        assertNotEquals(new Pair(1.0, 1.0), 11);
     }
 
     @Test
     public void getPairTest() {
-        assertEquals(new Pair(1.0, 2.0), new TableFunction(1, 2).getPair(0));
+        assertEquals(new Pair(1.0, 2.0), new TableFunction(1.0, 2.0).getPair(0));
     }
 
     @Test
@@ -29,10 +29,10 @@ public class TableFunctionTests {
         assertEquals( "1.0, 2.0" + "\n" + "3.0, 4.0", new TableFunction(1.0, 2.0, 3.0, 4.0).toString());
         assertNotEquals(null, new TableFunction());
         assertEquals(new TableFunction(1.0, 2.0), new TableFunction(1.0, 2.0));
-        assertNotEquals(new TableFunction(1.0, 2.0, 3.0, 4.0), new TableFunction(1, 2, 3, 4));
+        assertEquals(new TableFunction(1.0, 2.0, 3.0, 4.9), new TableFunction(1.0, 2.0, 3.0, 4.9));
     }
 
-    public TableFunction putTest() {
+    public TableFunction putTester() {
     TableFunction array = new TableFunction(3.0, 4.0);
     array.put(1.0, 2.0);
     return array;
@@ -40,15 +40,15 @@ public class TableFunctionTests {
 
     @Test
     public void put() {
-        assertEquals(new TableFunction(3.0, 4.0, 1.0, 2.0), putTest());
+        assertEquals(new TableFunction(3.0, 4.0, 1.0, 2.0), putTester());
     }
 
-    public TableFunction removeTest() {
+    public TableFunction removeTester() {
         TableFunction array = new TableFunction(1.0, 2.0, 3.0, 4.0);
         array.remove(1.0);
         return array;
     }
-    public TableFunction removeTest2() {
+    public TableFunction removeTester2() {
         TableFunction array = new TableFunction(1.0, 2.0);
         array.remove(1.0);
         return array;
@@ -56,8 +56,8 @@ public class TableFunctionTests {
 
     @Test
     public void remove() {
-        assertEquals(new TableFunction(), removeTest2());
-        assertEquals(new TableFunction(3.0, 4.0), removeTest());
+        assertEquals(new TableFunction(), removeTester2());
+        assertEquals(new TableFunction(3.0, 4.0), removeTester());
     }
 
     public String toStringTester() {
@@ -71,31 +71,23 @@ public class TableFunctionTests {
         assertEquals("2.4, 135.74" + "\n20.0, 29.1", new TableFunction(2.4, 135.74, 20.0, 29.1).toString());
     }
 
-    public Pair searchNearestTest() {
-        TableFunction array = new TableFunction(1.0, 2.0, 4.0, 5.0);
-        return array.searchNearest(2.0);
-    }
-
     @Test
     public void searchNearest() {
-        assertEquals(new Pair(1.0, 2.0), searchNearestTest());
-    }
-
-    public double interpTest() {
-        TableFunction array = new TableFunction(1.0, 2.0, 2.0, 4.0, 3.0, 6.0);
-        return array.interp(4.0);
+        assertEquals(new Pair(1.0, 2.0), new TableFunction(1.0, 2.0, 4.0, 5.0).searchNearest(2.0));
     }
 
     @Test
     public void interp() {
-        assertEquals(8.0, interpTest(), 0.01);
+        assertEquals(6.0, new TableFunction(1.0, 2.0, 2.0, 4.0, 4.0, 8.0).interp(3.0), 0.01);
+        assertEquals(8.0, new TableFunction(1.0, 2.0, 2.0, 4.0, 3.0, 6.0).interp(4.0), 0.01);
+
 
     }
 
     @Test
     public void pairToStringTest() {
-        assertEquals(new Pair<>(2, 4).toString(), "2, 4");
-        assertEquals(new Pair<>(2.4, 81.196).toString(), "2.4, 81.196");
+        assertEquals(new Pair(2.0, 4.0).toString(), "2.0, 4.0");
+        assertEquals(new Pair(2.4, 81.196).toString(), "2.4, 81.196");
     }
 
 }
