@@ -82,8 +82,10 @@ public final class TableFunction {
         ArrayList<Double> polynomial = new ArrayList<>();
         for (int i = 0; i < array.length; i++) {
             double l = 1.0;
-            for (int j = 0; j < array.length && j != i; j++)
-                l *= (x - array[j].getX()) / (array[i].getX() - array[j].getX());
+            for (int j = 0; j < array.length; j++)
+                if (j != i) {
+                    l *= (x - array[j].getX()) / (array[i].getX() - array[j].getX());
+                }
             polynomial.add(l);
         }
         double y = 0.0;
