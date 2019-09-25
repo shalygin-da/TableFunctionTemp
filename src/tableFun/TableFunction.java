@@ -106,7 +106,7 @@ public final class TableFunction {
         TableFunction objTableFun = (TableFunction) obj;
         boolean proof = true;
         for (int i = 0; i < array.length; i++) {
-            if (getPair(i) == objTableFun.getPair(i)) proof = false;
+            if (getPair(i) != objTableFun.getPair(i)) proof = false;
         }
         return proof;
     }
